@@ -1,29 +1,38 @@
-// --- Recurso Educativo: Topología Estrella ---
-// Nodo Central: Arduino UNO
-// Nodos Periféricos: LEDs Azules
+/**
+ * @file topologia_estrella.cpp
+ * @author Sara C. B., Yudis F. A., José G. M., Kenderson G. R.
+ * @brief Recurso educativo: Simulación física de Topología Estrella.
+ * El Arduino actúa como el nodo central (Hub/Switch) gestionando la red.
+ */
 
-const int centro = 2; // Pin que simula el envío desde el Switch
-const int nodos[] = {3, 4, 5, 6}; // Pines de los nodos receptores
+#include <Arduino.h>
+
+// Definición de pines para los nodos periféricos
+const int NODO_CENTRAL = 2; 
+const int NODOS_PERIFERICOS[] = {3, 4, 5, 6}; 
+const int TOTAL_NODOS = 4;
 
 void setup() {
-  pinMode(centro, OUTPUT);
-  for (int i = 0; i < 4; i++) {
-    pinMode(nodos[i], OUTPUT);
+  // Configuración de pines como salida
+  pinMode(NODO_CENTRAL, OUTPUT);
+  for (int i = 0; i < TOTAL_NODOS; i++) {
+    pinMode(NODOS_PERIFERICOS[i], OUTPUT);
   }
 }
 
 void loop() {
-  // Simulación de difusión (Broadcast) desde el centro
-  digitalWrite(centro, HIGH); 
-  delay(200);
-  
-  // Los nodos reciben la señal del centro secuencialmente
-  for (int i = 0; i < 4; i++) {
-    digitalWrite(nodos[i], HIGH);
-    delay(150);
-    digitalWrite(nodos[i], LOW);
+  // 1. El nodo central inicia la transmisión (Broadcast)
+  digitalWrite(NODO_CENTRAL, HIGH);
+  delay(500); // Tiempo de procesamiento del Switch
+
+  // 2. Envío secuencial de datos a cada terminal
+  for (int i = 0; i < TOTAL_NODOS; i++) {
+    digitalWrite(NODOS_PERIFERICOS[i], HIGH);
+    delay(200);
+    digitalWrite(NODOS_PERIFERICOS[i], LOW);
   }
-  
-  digitalWrite(centro, LOW);
-  delay(1000);
+
+  // 3. Fin del ciclo de transmisión
+  digitalWrite(NODO_CENTRAL, LOW);
+  delay(1500);
 }
